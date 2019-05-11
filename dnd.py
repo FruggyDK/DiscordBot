@@ -3,6 +3,7 @@ import time
 from prettytable import PrettyTable
 import math
 import progressbar
+from pyfiglet import Figlet
 
 #todo: implement progressbar(using runs)
 #code for progress: 
@@ -11,7 +12,7 @@ import progressbar
     #pbar = ProgressBar(widgets=widgets)
     #for i in pbar((i for i in range(150))):
         #time.sleep(0.1)
-        
+
 #lists
 diceList = []
 results = []
@@ -24,6 +25,9 @@ output =  PrettyTable()
 
 #user-inputs 
 outputState = False
+
+f = Figlet(font='slant')
+print(f.renderText('DnD Dice Simulator'))
 
 dice = int(input('''Which dice would you like to roll? (input the number of sides)
 > '''))   #sides
