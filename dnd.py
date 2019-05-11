@@ -1,8 +1,17 @@
 import random
-import datetime  as  dt
+import time
 from prettytable import PrettyTable
 import math
+import progressbar
 
+#todo: implement progressbar(using runs)
+#code for progress: 
+#def example10():
+    #widgets = ['Processed: ', Counter(), ' lines (', Timer(), ')']
+    #pbar = ProgressBar(widgets=widgets)
+    #for i in pbar((i for i in range(150))):
+        #time.sleep(0.1)
+        
 #lists
 diceList = []
 results = []
@@ -11,8 +20,10 @@ resultsTime = []
 #loop varibles
 checktotal = 0
 count = 0  
+output =  PrettyTable()
 
 #user-inputs 
+outputState = False
 
 dice = int(input('''Which dice would you like to roll? (input the number of sides)
 > '''))   #sides
@@ -39,49 +50,47 @@ def listAverage(list):
 def possibilities(dice, numberOfDice):
 	return int(math.pow(dice, numberOfDice))
 
-#def processTime(start, end):
-	#return end - start
-
-#def progress(arg1, arg2):
-	#return (arg1 / arg2) * 100
+def processTime(start, end):
+	return end - start
 
 #essentiel varibles for  mainloop
 maxTotal = maxTotal(dice, numberOfDice)
 
+
 for x in range(runs):
+	start = time.time()
 	countdown = possibilities(dice, numberOfDice)
-	#start = dt.datetime.now()
 	while checktotal != maxTotal:
 		for i in range(numberOfDice):
 			diceList.append(random.randint(1,dice))
-		print(x+1,"/",runs," | ",count," | ",countdown," | ")	
+		print("\t| Run {0} of {1} | Roll {2} of {3}".format(x+1, runs, count, countdown), end="\r")
 		checktotal = total(diceList)
 		count += 1
 		countdown -= 1
 		if checktotal != maxTotal:
 			diceList.clear()
 	else:
-		#end =  dt.datetime.now()
+		end = time.time()
 		results.append(count)
-		#resultsTime.append(processTime(start, end))
+		resultsTime.append(processTime(start, end))
 		checktotal = 0
 		count  =  0
 else:
 	results.sort()
-	#resultsTime.sort()
-	#print(resultsTime)
-	output =  PrettyTable()
-	output.field_names = ["Run#","#Rolls", "#Rolls compaired to statistics"]
-	output.align["Run#"] = "l"  #aligns the text to the left
-	output.align["#Rolls"] = "l"
-	output.align["#Rolls compaired to statistics"] = "c"
-	for z in range(runs):
-		output.add_row([(z+1),(results[z]), results[z] - possibilities(dice, numberOfDice)])
+	resultsTime.sort()
+	if outputState == True:
+		output.field_names = ["Run#","#Rolls", "#Rolls compaired to statistics","Time(seconds)"]
+		output.align["Run#"] = "l"  #aligns the text to the left
+		output.align["#Rolls"] = "l"
+		output.align["#Rolls compaired to statistics"] = "c"
+		for z in range(runs):
+			output.add_row([(z+1),(results[z]), results[z] - possibilities(dice, numberOfDice),resultsTime[z]])
+		else:
+			print(output)
+			print("Average number of rolls:",listAverage(results))
+			print("Average amount of time per run:",listAverage(resultsTime))
 	else:
+		output.field_names = ["#", "Min", "Average", "Max"]
+		output.add_row(["Rolls(runs={0}):".format(runs), min(results), listAverage(results), max(results)])
+		output.add_row(["Time(seconds):", min(resultsTime), listAverage(resultsTime), max(resultsTime)])
 		print(output)
-		print("Average number of rolls:",listAverage(results))
-
-
-
-#make mainloop a function, where  you  can  choose how  it the result should  be printet:
-#minimal shows only min, max, and average; full, which  shows all data entries(not recommended if runs > 1000)
