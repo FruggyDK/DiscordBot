@@ -83,7 +83,6 @@ titel("slant", message,space=False, newLine=True, clear=True)
 #essentiel varibles for  mainloop
 maxTotal = maxTotal(dice, numberOfDice)
 
-
 for x in range(runs):
 	start = time.time()
 	countdown = possibilities(dice, numberOfDice)
