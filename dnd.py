@@ -4,6 +4,7 @@ from prettytable import PrettyTable
 import math
 import progressbar
 from pyfiglet import Figlet
+import os
 
 #todo: implement progressbar(using runs)
 #code for progress: 
@@ -23,21 +24,21 @@ checktotal = 0
 count = 0  
 output =  PrettyTable()
 
-#user-inputs 
-outputState = False
-
-f = Figlet(font='slant')
-print(f.renderText('DnD Dice Simulator'))
-
-dice = int(input('''Which dice would you like to roll? (input the number of sides)
-> '''))   #sides
-numberOfDice = int(input('''How many dice should be rolled?
-> ''')) 
-runs = int(input('''How many times would you like to test it?
-> ''')) 
-
 
 #functions
+def titel(font,  message, space=bool, newLine=bool, clear=bool):
+	if clear == True:
+		os.system("clear")
+	print (Figlet(font='slant').renderText('DnD Dice Simulator'))
+	print ("  <v1.0 - Made by Christian Kaae Larsen>")
+	print("\n")
+	if space == True:
+		print("\t"+message)
+	else:
+		print("  "+message)
+	if newLine == True:
+		print("\n")
+	
 def maxTotal(dice, numberOfDice):
 	return dice * numberOfDice 
 
@@ -57,6 +58,28 @@ def possibilities(dice, numberOfDice):
 def processTime(start, end):
 	return end - start
 
+
+#user-inputs 
+outputState = False
+
+titel("slant", " ", space=False, newLine=True, clear=False)
+
+#improve(limit  to one  line) #make a list with the  input like  [20,6,10]  and then assign the varibles from the  list
+dice = int(input('''Which dice would you like to roll? (input the number of sides)
+> '''))   #sides
+numberOfDice = int(input('''How many dice should be rolled?
+> ''')) 
+runs = int(input('''How many times would you like to test it?
+> ''')) 
+
+goal =  []
+for i in  range(numberOfDice):
+	goal.append(dice)
+
+message  =  ("Goal: {0} = {1}").format(str(goal), str(total(goal)))
+
+titel("slant", message,space=False, newLine=True, clear=True)
+
 #essentiel varibles for  mainloop
 maxTotal = maxTotal(dice, numberOfDice)
 
@@ -67,7 +90,7 @@ for x in range(runs):
 	while checktotal != maxTotal:
 		for i in range(numberOfDice):
 			diceList.append(random.randint(1,dice))
-		print("\t| Run {0} of {1} | Roll {2} of {3}".format(x+1, runs, count, countdown), end="\r")
+		print("  Run {0} of {1} | Roll {2} of {3}".format(x+1, runs, count, countdown), end="\r")
 		checktotal = total(diceList)
 		count += 1
 		countdown -= 1
@@ -83,6 +106,7 @@ else:
 	results.sort()
 	resultsTime.sort()
 	if outputState == True:
+		titel("slant", "results:", space=False, newLine=False, clear=True)
 		output.field_names = ["Run#","#Rolls", "#Rolls compaired to statistics","Time(seconds)"]
 		output.align["Run#"] = "l"  #aligns the text to the left
 		output.align["#Rolls"] = "l"
@@ -94,6 +118,7 @@ else:
 			print("Average number of rolls:",listAverage(results))
 			print("Average amount of time per run:",listAverage(resultsTime))
 	else:
+		titel("slant", "results:", space=False, newLine=False, clear=True)
 		output.field_names = ["#", "Min", "Average", "Max"]
 		output.add_row(["Rolls(runs={0}):".format(runs), min(results), listAverage(results), max(results)])
 		output.add_row(["Time(seconds):", min(resultsTime), listAverage(resultsTime), max(resultsTime)])
