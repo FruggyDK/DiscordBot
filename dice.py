@@ -1,11 +1,7 @@
 import random
 
-def total(arg1):
-	total =  0 
-	for item in arg1:
-		total += item
-	else:
-		return total 
+def average(asum, entries):
+	return asum/entries
 
 def dice(dice, numberOfDice):
 	slag = []
@@ -15,4 +11,5 @@ def dice(dice, numberOfDice):
 		for i in range(numberOfDice):
 			slag.append(random.randint(1,dice))
 		else:
-			return "{0} = {1}".format(slag, total(slag))
+			return '''{0} = {1}
+average = {2}'''.format(slag, sum(slag), average(sum(slag), numberOfDice))
